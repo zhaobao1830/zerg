@@ -11,8 +11,13 @@ namespace app\sample\controller;
 
 class Test
 {
-  public function hello()
+  public function hello($id, $name, $age)
   {
-      return 'Hello,zb';
+      echo $id;
+      echo '|';
+      echo $name;
+      echo '|';
+      echo $age;
+//      return 'Hello,zb';
   }
 }
