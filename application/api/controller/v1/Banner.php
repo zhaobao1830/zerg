@@ -19,6 +19,15 @@ class Banner
     */
    public function getBanner($id)
    {
-
+       $data = [
+           'name' => 'vendor11111',
+           'email' => 'venodr@qq.com'
+       ];
+       $validate = new Validate([
+           'name' => 'require|max:10',
+           'email' => 'email'
+       ]);
+       $result = $validate->batch()->check($data);
+       var_dump($validate->getError());
    }
 }
