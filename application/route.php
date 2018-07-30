@@ -21,8 +21,8 @@
 //
 //];
 
-//动态路由
-use think\Route;
+////动态路由
+//use think\Route;
 
 //Route::rule('路由表达式', '请求地址', '请求类型', '路由参数（数组）', '变了规则（数组）');
 
@@ -32,6 +32,11 @@ use think\Route;
 //Route::rule('hello', 'sample/Test/hello', 'GET', ['https'=>true]);
 //Route::rule('hello', 'sample/Test/hello', 'GET|POST', ['https'=>true]);
 //(2)、第二种写法
-Route::post('hello/:id', 'sample/Test/hello');
+//Route::post('hello/:id', 'sample/Test/hello');
 //Route::post();
 //Route::any();
+
+//动态路由
+use think\Route;
+
+Route::get('banner/:id', 'api/v1.Banner/getBanner');
