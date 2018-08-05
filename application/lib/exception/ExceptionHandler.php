@@ -12,8 +12,10 @@ namespace app\api\lib\exception;
 /*
  * 重写Handle的render方法，实现自定义异常消息
  */
-use Exception;
+//use Exception;
+use http\Exception;
 use think\exception\Handle;
+use think\exception\HttpException;
 use think\Request;
 
 class ExceptionHandler extends Handle
@@ -21,7 +23,6 @@ class ExceptionHandler extends Handle
     private $code;
     private $msg;
     private $errorCode;
-
     public function render(Exception $e)
     {
         if ($e instanceof BaseException)

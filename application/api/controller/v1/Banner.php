@@ -9,6 +9,10 @@
 namespace app\api\controller\v1;
 
 
+use app\api\validate\IDMustBePositiveInt;
+use app\api\model\Banner as BannerModel;
+use think\Exception;
+
 class Banner
 {
    /**
@@ -19,15 +23,14 @@ class Banner
     */
    public function getBanner($id)
    {
-       $data = [
-           'name' => 'vendor11111',
-           'email' => 'venodr@qq.com'
-       ];
-       $validate = new Validate([
-           'name' => 'require|max:10',
-           'email' => 'email'
-       ]);
-       $result = $validate->batch()->check($data);
-       var_dump($validate->getError());
+       // AOP 面向切面编程
+//       (new IDMustBePositiveInt())->goCheck();
+//       $banner = BannerModel::get($id);
+
+       $banner = BannerModel::getBannerById($id);
+       if(!$banner){
+           throw new Exception('内部错误');
+       }
+       return $banner;
    }
 }
