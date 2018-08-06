@@ -28,7 +28,9 @@ class Banner
 //       $banner = BannerModel::get($id);
 
        $banner = BannerModel::getBannerById($id);
-       if(!$banner){
+       // 模型的一些方法
+//       $banner->hidden(['update_time']);
+       if(!$banner) {
            throw new Exception('内部错误');
        }
        return $banner;
