@@ -6,7 +6,7 @@
  * Time: 21:16
  */
 
-namespace app\api\lib\exception;
+namespace app\lib\exception;
 
 
 /*
@@ -23,6 +23,7 @@ class ExceptionHandler extends Handle
     private $code;
     private $msg;
     private $errorCode;
+
     public function render(Exception $e)
     {
         if ($e instanceof BaseException)
@@ -69,7 +70,6 @@ class ExceptionHandler extends Handle
             'level' => ['error']
         ]);
 //        Log::record($e->getTraceAsString());
-        // 日志的级别为error
         Log::record($e->getMessage(),'error');
     }
 }

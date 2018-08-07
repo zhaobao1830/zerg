@@ -2,11 +2,11 @@
 /**
  * Created by PhpStorm.
  * User: Administrator
- * Date: 2018/8/3
- * Time: 23:20
+ * Date: 2018/8/7
+ * Time: 22:36
  */
 
-namespace app\api\lib\exception;
+namespace app\lib\exception;
 
 /**
  * Class ParameterException

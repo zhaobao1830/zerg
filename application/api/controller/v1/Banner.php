@@ -24,12 +24,10 @@ class Banner
    public function getBanner($id)
    {
        // AOP 面向切面编程
-//       (new IDMustBePositiveInt())->goCheck();
 //       $banner = BannerModel::get($id);
-
+//       $validate = new IDMustBePositiveInt();
+//       $validate->goCheck();
        $banner = BannerModel::getBannerById($id);
-       // 模型的一些方法
-//       $banner->hidden(['update_time']);
        if(!$banner) {
            throw new Exception('内部错误');
        }

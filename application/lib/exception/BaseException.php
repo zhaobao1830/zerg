@@ -6,7 +6,7 @@
  * Time: 21:16
  */
 
-namespace app\api\lib\exception;
+namespace app\lib\exception;
 use think\Exception;
 
 class BaseException extends Exception
@@ -16,6 +16,7 @@ class BaseException extends Exception
     public $errorCode = 999;
 
     public $shouldToClient = true;
+
     /**
      * 构造函数，接收一个关联数组
      * @param array $params 关联数组只应包含code、msg和errorCode，且不应该是空值
