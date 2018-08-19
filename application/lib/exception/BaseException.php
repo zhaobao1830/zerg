@@ -1,20 +1,17 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: Administrator
- * Date: 2018/8/2
- * Time: 21:16
- */
-
 namespace app\lib\exception;
 use think\Exception;
 
+/**
+ * Class BaseException
+ * 自定义异常类的基类
+ */
 class BaseException extends Exception
 {
     public $code = 400;
     public $msg = 'invalid parameters';
     public $errorCode = 999;
-
+    
     public $shouldToClient = true;
 
     /**
@@ -37,3 +34,4 @@ class BaseException extends Exception
         }
     }
 }
+

@@ -20,16 +20,16 @@ class IDCollection extends BaseValidate
     ];
 
     // $value为传进去的ids
-    public function checkIDs($value)
+    protected function checkIDs($value)
     {
         // 使用,号分割
-        $value = explode(',', $value);
-        if(!$value){
+        $values = explode(',', $value);
+        if (empty($values)) {
             return false;
         }
-        foreach ($value as $id)
-        {
-            if(!$this->isPositiveInteger($id)){
+        foreach ($values as $id) {
+            if (!$this->isPositiveInteger($id)) {
+                // 必须是正整数
                 return false;
             }
         }

@@ -11,6 +11,7 @@ namespace app\api\validate;
 
 
 use app\lib\exception\ParameterException;
+use think\Exception;
 use think\Validate;
 use think\Request;
 /**
@@ -28,21 +29,21 @@ class BaseValidate extends Validate
      */
     public function goCheck()
     {
-        //必须设置contetn-type:application/json
+        //获取http传入的参数
+        // 对这些参数进行校验
         $request = Request::instance();
-//        $params = $request->param();
-//        $params['token'] = $request->header('token');
+        $params = $request->param();
 
-//        if (!$this->check($params)) {
-//            $exception = new ParameterException(
-//                [
-//                    // $this->error有一个问题，并不是一定返回数组，需要判断
-//                    'msg' => is_array($this->error) ? implode(
-//                        ';', $this->error) : $this->error,
-//                ]);
-//            throw $exception;
-//        }
-        return true;
+        $result = $this->check($params);
+        if(!$result){
+//            $e = new ParameterException([
+            $error = $this->error;
+//            ]);
+            throw new Exception($error);
+//            throw $msg;
+        }else{
+            return true;
+        }
     }
 
     protected function isPositiveInteger($value, $rule='', $data='', $field='')
