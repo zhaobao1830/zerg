@@ -15,6 +15,6 @@ class IDMustBePositiveInt extends BaseValidate
         'id' => 'require|isPositiveInteger',
     ];
     protected $message=[
-        'id' => 'id必须为正整数'
+        'id' => 'id必须为正整数111'
     ];
 }

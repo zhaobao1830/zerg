@@ -25,8 +25,9 @@ class Banner
    {
        // AOP 面向切面编程
  //      $banner = BannerModel::get($id);
-       $validate = new IDMustBePositiveInt();
-       $validate->goCheck();
+//       $validate = new IDMustBePositiveInt();
+//       $validate->goCheck();
+       (new IDMustBePositiveInt())->goCheck();
        $banner = BannerModel::getBannerById($id);
        if(!$banner) {
            throw new Exception('内部错误');
