@@ -28,6 +28,11 @@ class Theme extends Controller
 
     public function getComplexOne($id)
     {
-        return 'SUCCESS';
+//        (new IDMustBePositiveInt())->goCheck();
+        $theme = ThemeModel::getThemeWithProducts($id);
+        if(!$theme){
+            throw new ThemeException();
+        }
+        return $theme;
     }
 }
