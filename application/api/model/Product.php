@@ -29,4 +29,19 @@ class Product extends BaseModel
             ->select();
         return $products;
     }
+
+    /**
+     * 获取某分类下商品
+     * @param $categoryID
+     * @param int $page
+     * @param int $size
+     * @param bool $paginate
+     * @return \think\Paginator
+     */
+    public static function getProductsByCategoryID($categoryID)
+    {
+       $products = self::where('category_id','=',$categoryID)
+         ->select();
+       return $products;
+    }
 }

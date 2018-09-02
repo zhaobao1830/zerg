@@ -17,9 +17,21 @@ class Product
     {
         (new Count())->goCheck();
         $products = ProductModel::getMostRecent($count);
-        if(!$products){
+        if($products->isEmpty()){
             throw new ProductException();
         }
+        $products = $products->hidden(['summary']);
+        return $products;
+    }
+
+    public function getAllInCategory($id)
+    {
+        (new IDMustBePositiveInt())->goCheck();
+        $products = ProductModel::getProductsByCategoryID($id);
+        if($products->isEmpty()){
+            throw new ProductException();
+        }
+        $products = $products->hidden(['summary']);
         return $products;
     }
 }

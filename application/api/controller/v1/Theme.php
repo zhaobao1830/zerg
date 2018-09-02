@@ -30,7 +30,7 @@ class Theme extends Controller
     {
 //        (new IDMustBePositiveInt())->goCheck();
         $theme = ThemeModel::getThemeWithProducts($id);
-        if(!$theme){
+        if($theme->isEmpty()){
             throw new ThemeException();
         }
         return $theme;
