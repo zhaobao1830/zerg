@@ -54,4 +54,13 @@ class BaseValidate extends Validate
             return false;
         }
     }
+
+    protected function isNotEmpty($value, $rule='', $data='', $field='')
+    {
+        if (empty($value)) {
+            return $field . '不允许为空';
+        } else {
+            return true;
+        }
+    }
 }

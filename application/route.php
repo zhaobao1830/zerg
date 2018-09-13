@@ -47,3 +47,5 @@ Route::get('api/:version/product/recent', 'api/:version.Product/getByCategory');
 Route::get('api/:version/product/by_category', 'api/:version.Product/getAllInCategory');
 
 Route::get('api/:version/category/all', 'api/:version.Category/getAllCategories');
+
+Route::post('api/:version/category/all', 'api/:version.Token/getToken');
