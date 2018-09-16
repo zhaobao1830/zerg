@@ -36,16 +36,28 @@
 //Route::post();
 //Route::any();
 
+// 路由分组的写法
+//Theme
+// 如果要使用分组路由，建议使用闭包的方式，数组的方式不允许有同名的key
+//Route::group('api/:version/theme',[
+//    '' => ['api/:version.Theme/getThemes'],
+//    ':t_id/product/:p_id' => ['api/:version.Theme/addThemeProduct'],
+//    ':t_id/product/:p_id' => ['api/:version.Theme/addThemeProduct']
+//]);
+
 //动态路由
 use think\Route;
 
 Route::get('api/:version/banner/:id', 'api/:version.Banner/getBanner');
+
 Route::get('api/:version/theme', 'api/:version.Theme/getSimpleList');
 Route::get('api/:version/theme/:id', 'api/:version.Theme/getComplexOne');
 
 Route::get('api/:version/product/recent', 'api/:version.Product/getByCategory');
 Route::get('api/:version/product/by_category', 'api/:version.Product/getAllInCategory');
+// ,[],['id'=>'\d+'] 是路由规则 解决的问题是：请求的时候会和recent冲突 加上这个表示，只有product后面是正整数  才会请求下面这个接口
+Route::get('api/:version/product/:id', 'api/:version.Product/getOne',[],['id'=>'\d+']);
 
 Route::get('api/:version/category/all', 'api/:version.Category/getAllCategories');
 
-Route::post('api/:version/category/all', 'api/:version.Token/getToken');
+Route::post('api/:version/token/user', 'api/:version.Token/getToken');

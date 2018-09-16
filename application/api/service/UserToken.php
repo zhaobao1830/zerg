@@ -8,10 +8,12 @@
 
 namespace app\api\service;
 
-
+use app\api\model\User;
+use app\lib\exception\TokenException;
+use app\lib\exception\WeChatException;
 use think\Exception;
 
-class UserToken
+class UserToken extends Token
 {
     protected $code;
     protected $wxAppID;
@@ -60,5 +62,96 @@ class UserToken
                 return $this->grantToken($wxResult);
             }
         }
+    }
+
+    // 处理微信登陆异常
+    // 那些异常应该返回客户端，那些异常不应该返回客户端
+    // 需要认真思考
+    private function processLoginError($wxResult)
+    {
+        throw new WeChatException(
+            [
+                'msg' => $wxResult['errmsg'],
+                'errorCode' => $wxResult['errcode']
+            ]);
+    }
+
+    // 颁发令牌
+    // 只要调用登陆就颁发新令牌
+    // 但旧的令牌依然可以使用
+    // 所以通常令牌的有效时间比较短
+    // 目前微信的express_in时间是7200秒
+    // 在不设置刷新令牌（refresh_token）的情况下
+    // 只能延迟自有token的过期时间超过7200秒（目前还无法确定，在express_in时间到期后
+    // 还能否进行微信支付
+    // 没有刷新令牌会有一个问题，就是用户的操作有可能会被突然中断
+    private function grantToken($wxResult)
+    {
+//        思路：1、拿到openid
+//              2、数据库查看下，是否已经存在
+//              3、如果存在，就不处理，如果不存在，就新增加一条user记录
+//              4、生成令牌，准备缓存数据，写入缓存
+//              5、把令牌返回给客户端
+        // 此处生成令牌使用的是TP5自带的令牌
+        // 如果想要更加安全可以考虑自己生成更复杂的令牌
+        // 比如使用JWT并加入盐，如果不加入盐有一定的几率伪造令牌
+        //        $token = Request::instance()->token('token', 'md5');
+        $openid = $wxResult['openid'];
+        $user = User::getByOpenID($openid);
+        if (!$user)
+            // 借助微信的openid作为用户标识
+            // 但在系统中的相关查询还是使用自己的uid
+        {
+            $uid = $this->newUser($openid);
+        }
+        else {
+            $uid = $user->id;
+        }
+        $cachedValue = $this->prepareCachedValue($wxResult, $uid);
+        $token = $this->saveToCache($cachedValue);
+        return $token;
+    }
+
+    // 创建新用户
+    private function newUser($openid)
+    {
+        // 有可能会有异常，如果没有特别处理
+        // 这里不需要try——catch
+        // 全局异常处理会记录日志
+        // 并且这样的异常属于服务器异常
+        // 也不应该定义BaseException返回到客户端
+        $user = User::create(
+            [
+                'openid' => $openid
+            ]);
+        return $user->id;
+    }
+
+    // scope用来判断权限的
+    private function prepareCachedValue($wxResult, $uid)
+    {
+        $cachedValue = $wxResult;
+        $cachedValue['uid'] = $uid;
+        $cachedValue['scope'] = ScopeEnum::User;
+        return $cachedValue;
+    }
+
+    // 写入缓存
+    private function saveToCache($wxResult)
+    {
+        $key = self::generateToken();
+        $value = json_encode($wxResult);
+        // 过期时间
+        $expire_in = config('setting.token_expire_in');
+        // 写入缓存
+        $result = cache($key, $value, $expire_in);
+
+        if (!$result){
+            throw new TokenException([
+                'msg' => '服务器缓存异常',
+                'errorCode' => 10005
+            ]);
+        }
+        return $key;
     }
 }

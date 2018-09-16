@@ -25,7 +25,10 @@ class Token
     public function getToken($code='')
     {
         (new TokenGet())->goCheck();
-        $ut = new UserToken();
+        $ut = new UserToken($code);
         $token = $ut->get($code);
+        return [
+            'token' => $token
+        ];
     }
 }
