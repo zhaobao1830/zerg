@@ -220,4 +220,15 @@ class Order
             sprintf('%02d', rand(0, 99));
         return $orderSn;
     }
+
+    // 库存量检测
+    public function checkOrderStock($orderID){
+        $oProducts = OrderProduct::where('order_id','=',$orderID)
+            ->select();
+        $this->oProducts = $oProducts;
+
+        $this->products = $this->getProductsByOrder($oProducts);
+        $status = $this->getOrderStatus();
+        return $status;
+    }
 }
