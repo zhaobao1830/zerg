@@ -8,11 +8,15 @@
 
 namespace app\api\service;
 
+use app\lib\enum\OrderStatusEnum;
 use app\lib\exception\OrderException;
 use app\lib\exception\TokenException;
 use think\Exception;
 use app\api\model\Order as OrderModel;
 use app\api\service\Order as OrderService;
+use think\Loader;
+
+Loader::import('WxPay.WxPay',EXTEND_PATH,'.Api.php');
 
 class Pay
 {
@@ -40,8 +44,30 @@ class Pay
 
         $orderService = new OrderService();
         $status = $orderService->checkOrderStock($this->orderID);
+        if (!$status['pass']) {
+            return $status;
+        }
+        return $this->makeWxPreOrder($status['orderPrice']);
     }
 
+    private function makeWxPreOrder($totalPrice){
+        $openid = Token::getCurrentTokenVar('openid');
+        if (!$openid){
+            throw new TokenException();
+        }
+        $wxOrderData = new \WxPayUnifiedOrder();
+        $wxOrderData = new \WxPayUnifiedOrder();
+        $wxOrderData->SetOut_trade_no($this->orderNO);
+        $wxOrderData->SetTrade_type('JSAPI');
+        $wxOrderData->SetTotal_fee($totalPrice*100);
+        $wxOrderData->SetBody('零食商贩');
+        $wxOrderData->SetOpenid($openid);
+        $wxOrderData->SetNotify_url(config('secure.pay_back_url'));
+        return $this->getPaySignature($wxOrderData);
+    }
+    private function getPaySignature($wxOrderData){
+
+    }
     private function checkOrderValid(){
         $order = OrderModel::where('id','=',$this->orderID)
             ->find();
@@ -55,5 +81,15 @@ class Pay
                 'errorCode' => 10003
             ]);
         }
+
+        if ($order->status != OrderStatusEnum::UNPAID){
+            throw new OrderException([
+                'msg' => '订单状态异常',
+                'errorCode' => 80003,
+                'code' => 400
+            ]);
+        }
+        $this->orderNO = $order->order_no;;
+        return true;
     }
 }
