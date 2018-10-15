@@ -40,5 +40,6 @@ class Pay extends BaseController
         //微信返回的数据特点：post,xml格式,不会携带参数
         // 使用SDK的好处 可以处理XML格式
         $notify = new WxNotify();
+        $notify->Handle();
     }
 }
