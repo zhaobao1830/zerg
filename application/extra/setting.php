@@ -8,6 +8,6 @@
 
 return [
 //    'http://z.cn指向的是zerg下的public目录
-    'img_prefix' => 'http://z.cn/image',
+    'img_prefix' => 'http://z.cn/images',
     'token_expire_in' => 7200
 ];
