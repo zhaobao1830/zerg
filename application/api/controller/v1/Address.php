@@ -18,6 +18,24 @@ use app\lib\exception\UserException;
 class Address extends BaseController
 {
     /**
+     * 获取用户地址信息
+     * @return UserAddress
+     * @throws UserException
+     */
+    public function getUserAddress(){
+        $uid = TokenService::getCurrentUid();
+        $userAddress = UserAddress::where('user_id', $uid)
+            ->find();
+        if(!$userAddress){
+            throw new UserException([
+                'msg' => '用户地址不存在',
+                'errorCode' => 60001
+            ]);
+        }
+        return $userAddress;
+    }
+
+    /**
      * 更新或者创建用户收获地址
      */
     public function createOrUpdateAddress()
