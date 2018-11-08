@@ -17,6 +17,9 @@ use app\lib\exception\UserException;
 
 class Address extends BaseController
 {
+    protected $beforeActionList = [
+        'checkPrimaryScope' => ['only' => 'getUserAddress,createOrUpdateAddress']
+    ];
     /**
      * 获取用户地址信息
      * @return UserAddress
