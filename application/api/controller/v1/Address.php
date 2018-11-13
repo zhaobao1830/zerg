@@ -10,6 +10,7 @@ namespace app\api\controller\v1;
 
 use app\api\controller\BaseController;
 use app\api\model\User;
+use app\api\model\UserAddress;
 use app\api\service\Token as TokenService;
 use app\api\validate\AddressNew;
 use app\lib\exception\SuccessMessage;
