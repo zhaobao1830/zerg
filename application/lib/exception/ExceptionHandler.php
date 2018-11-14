@@ -15,7 +15,6 @@ namespace app\lib\exception;
 //use Exception;
 use http\Exception;
 use think\exception\Handle;
-use think\exception\HttpException;
 use think\Request;
 
 class ExceptionHandler extends Handle
@@ -24,7 +23,8 @@ class ExceptionHandler extends Handle
     private $msg;
     private $errorCode;
 
-    public function render(Exception $e)
+    // 所有返回的错误信息都会由render这个方法来渲染
+    public function render(\Exception $e)
     {
         if ($e instanceof BaseException)
         {
