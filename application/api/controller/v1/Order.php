@@ -17,6 +17,7 @@ use app\api\service\Order as OrderService;
 use app\api\model\Order as OrderModel;
 use app\api\validate\PagingParameter;
 use app\lib\exception\OrderException;
+use app\lib\exception\SuccessMessage;
 
 class Order extends BaseController
 {
@@ -106,5 +107,14 @@ class Order extends BaseController
             'current_page' => $pagingOrders->currentPage(),
             'data' => $data
         ];
+    }
+
+    public function delivery($id){
+        (new IDMustBePositiveInt())->goCheck();
+        $order = new OrderService();
+        $success = $order->delivery($id);
+        if($success){
+            return new SuccessMessage();
+        }
     }
 }
